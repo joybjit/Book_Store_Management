@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 const userModel = require("../model/userModel");
 const authModel = require("../model/authModel");
+const walletModel = require("../model/walletModel");
 const { success, failure } = require("../util/common");
 const jsonwebtoken = require("jsonwebtoken");
 
@@ -20,6 +21,11 @@ class Auth {
         return res.status(200).send(failure("User Already Exists"));
       }
       const userData = await userModel.create({ name, email, phone, address });
+      if (role != 1) {
+        await walletModel.create({
+          user: userData._id,
+        });
+      }
       const hashedPassword = await bcrypt.hash(password, 10).then((hash) => {
         return hash;
       });

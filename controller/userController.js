@@ -1,4 +1,6 @@
+const jsonwebtoken = require("jsonwebtoken");
 const userModel = require("../model/userModel");
+const walletModel = require("../model/walletModel");
 const { failure, success } = require("../util/common");
 
 class User {

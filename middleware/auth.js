@@ -1,5 +1,6 @@
 const { failure } = require("../util/common");
 const jsonwebtoken = require("jsonwebtoken");
+const userModel = require("../model/userModel");
 
 const authentication = (req, res, next) => {
   // console.log(req.headers.authorization);
@@ -29,9 +30,7 @@ const isAdmin = (req, res, next) => {
     if (payload.role === 1) {
       next();
     } else {
-      return res
-        .status(200)
-        .send(failure("Unauthorized Access! Can't Add Product!"));
+      return res.status(200).send(failure("Unauthorized Access!"));
     }
   } catch (error) {
     console.log("admin catch");
