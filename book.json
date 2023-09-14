@@ -1,0 +1,261 @@
+[
+    {
+        "title": "The Book of Mystery",
+        "author": "John Doe",
+        "price": 14.99,
+        "genre": [
+            "Mystery"
+        ],
+        "year": 2010,
+        "pages": 280,
+        "discountPercentage": 10,
+        "rating": 0,
+        "stock": 30
+    },
+    {
+        "title": "Fantasy Quest",
+        "author": "Jane Smith",
+        "price": 9.99,
+        "genre": [
+            "Fantasy"
+        ],
+        "year": 2015,
+        "pages": 400,
+        "discountPercentage": 15,
+        "rating": 0,
+        "stock": 20
+    },
+    {
+        "title": "Science Explorations",
+        "author": "Robert Johnson",
+        "price": 19.99,
+        "genre": [
+            "Science",
+            "Non-fiction"
+        ],
+        "year": 2020,
+        "pages": 350,
+        "discountPercentage": 5,
+        "rating": 0,
+        "stock": 15
+    },
+    {
+        "title": "Love Stories",
+        "author": "Emily Adams",
+        "price": 12.49,
+        "genre": [
+            "Romance"
+        ],
+        "year": 2018,
+        "pages": 240,
+        "discountPercentage": 12,
+        "rating": 0,
+        "stock": 25
+    },
+    {
+        "title": "Historical Chronicles",
+        "author": "David Williams",
+        "price": 17.99,
+        "genre": [
+            "History",
+            "Non-fiction"
+        ],
+        "year": 2012,
+        "pages": 320,
+        "discountPercentage": 8,
+        "rating": 0,
+        "stock": 10
+    },
+    {
+        "title": "Adventure Tales",
+        "author": "Susan Brown",
+        "price": 11.99,
+        "genre": [
+            "Adventure"
+        ],
+        "year": 2017,
+        "pages": 280,
+        "discountPercentage": 10,
+        "rating": 0,
+        "stock": 35
+    },
+    {
+        "title": "Poetry Collection",
+        "author": "Michael White",
+        "price": 8.99,
+        "genre": [
+            "Poetry"
+        ],
+        "year": 2019,
+        "pages": 150,
+        "discountPercentage": 7,
+        "rating": 0,
+        "stock": 18
+    },
+    {
+        "title": "Cooking Delights",
+        "author": "Sarah Cook",
+        "price": 15.49,
+        "genre": [
+            "Cooking",
+            "Non-fiction"
+        ],
+        "year": 2016,
+        "pages": 200,
+        "discountPercentage": 10,
+        "rating": 0,
+        "stock": 22
+    },
+    {
+        "title": "Thriller Nights",
+        "author": "James Black",
+        "price": 13.99,
+        "genre": [
+            "Thriller"
+        ],
+        "year": 2014,
+        "pages": 290,
+        "discountPercentage": 8,
+        "rating": 0,
+        "stock": 28
+    },
+    {
+        "title": "Self-Help Guide",
+        "author": "Alice Green",
+        "price": 10.99,
+        "genre": [
+            "Self-help",
+            "Non-fiction"
+        ],
+        "year": 2021,
+        "pages": 180,
+        "discountPercentage": 15,
+        "rating": 0,
+        "stock": 12
+    },
+    {
+        "title": "Artistic Expressions",
+        "author": "Mark Turner",
+        "price": 16.99,
+        "genre": [
+            "Art",
+            "Non-fiction"
+        ],
+        "year": 2013,
+        "pages": 260,
+        "discountPercentage": 7,
+        "rating": 0,
+        "stock": 40
+    },
+    {
+        "title": "Nature Wonders",
+        "author": "Laura Hill",
+        "price": 18.49,
+        "genre": [
+            "Nature",
+            "Non-fiction"
+        ],
+        "year": 2022,
+        "pages": 310,
+        "discountPercentage": 10,
+        "rating": 0,
+        "stock": 8
+    },
+    {
+        "title": "Business Strategies",
+        "author": "William Clark",
+        "price": 14.99,
+        "genre": [
+            "Business",
+            "Non-fiction"
+        ],
+        "year": 2011,
+        "pages": 270,
+        "discountPercentage": 12,
+        "rating": 0,
+        "stock": 19
+    },
+    {
+        "title": "Travel Adventures",
+        "author": "Linda Turner",
+        "price": 11.49,
+        "genre": [
+            "Travel",
+            "Non-fiction"
+        ],
+        "year": 2016,
+        "pages": 220,
+        "discountPercentage": 5,
+        "rating": 0,
+        "stock": 24
+    },
+    {
+        "title": "Sci-Fi Galaxy",
+        "author": "Peter Spacey",
+        "price": 13.99,
+        "genre": [
+            "Science Fiction"
+        ],
+        "year": 2020,
+        "pages": 330,
+        "discountPercentage": 8,
+        "rating": 0,
+        "stock": 16
+    },
+    {
+        "title": "Health and Wellness",
+        "author": "Eva Health",
+        "price": 12.99,
+        "genre": [
+            "Health",
+            "Non-fiction"
+        ],
+        "year": 2019,
+        "pages": 250,
+        "discountPercentage": 7,
+        "rating": 0,
+        "stock": 21
+    },
+    {
+        "title": "Music Harmonies",
+        "author": "Sam Musician",
+        "price": 9.99,
+        "genre": [
+            "Music",
+            "Non-fiction"
+        ],
+        "year": 2018,
+        "pages": 190,
+        "discountPercentage": 10,
+        "rating": 0,
+        "stock": 29
+    },
+    {
+        "title": "Political Insights",
+        "author": "Alex Politics",
+        "price": 16.49,
+        "genre": [
+            "Politics",
+            "Non-fiction"
+        ],
+        "year": 2015,
+        "pages": 280,
+        "discountPercentage": 12,
+        "rating": 0,
+        "stock": 14
+    },
+    {
+        "title": "Fairy Tales",
+        "author": "Grace Fairytale",
+        "price": 8.49,
+        "genre": [
+            "Children's",
+            "Fantasy"
+        ],
+        "year": 2017,
+        "pages": 120,
+        "discountPercentage": 5,
+        "rating": 0,
+        "stock": 33
+    }
+]
