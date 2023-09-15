@@ -25,7 +25,6 @@ class Wallet {
           })
         );
       } else throw new Error();
-      const user = await userModel.findOne({ email: payload.email });
     } catch (error) {
       if (error instanceof jsonwebtoken.TokenExpiredError) {
         return res.status(401).send(failure("Please Login Again!"));

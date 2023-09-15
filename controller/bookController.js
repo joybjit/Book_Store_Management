@@ -1,20 +1,21 @@
 const bookModel = require("../model/bookModel");
+const { validationResult } = require("express-validator");
 const { failure, success } = require("../util/common");
 
 class Book {
   async create(req, res) {
     try {
-      const {
-        title,
-        author,
-        price,
-        genre,
-        year,
-        pages,
-        discountPercentage,
-        rating,
-        stock,
-      } = req.body;
+      const validation = validationResult(req).array();
+      if (validation.length) {
+        return res.status(422).send(
+          failure(
+            "Failed to Add Book",
+            validation.map((x) => x.msg)
+          )
+        );
+      }
+      const { title, author, price, genre, year, pages, rating, stock } =
+        req.body;
       const check = await bookModel.findOne({ title: title });
       // console.log(check);
       if (check) {
@@ -29,12 +30,11 @@ class Book {
         genre,
         year,
         pages,
-        discountPercentage,
         rating,
         stock,
       });
       //   console.log(book);
-      return res.status(200).send(success("Book is Added Successfully", book));
+      return res.status(201).send(success("Book is Added Successfully", book));
     } catch (err) {
       console.log("create catch");
       return res.status(500).send(failure("Internal Server Error!"));
@@ -54,6 +54,49 @@ class Book {
       return res.status(500).send(failure("Internal Server Error!"));
     }
   }
+  async deleteBook(req, res) {
+    try {
+      const { id } = req.params;
+      const deleteResult = await bookModel.deleteOne({ _id: id });
+      if (deleteResult.deletedCount) {
+        return res.status(200).send(failure("Book is Deleted Successfully!"));
+      } else {
+        return res.status(404).send(failure("Failed to Delete Book!"));
+      }
+    } catch (err) {
+      return res.status(500).send(failure("Internal Server Error!"));
+    }
+  }
+  async editBook(req, res) {
+    try {
+      const validation = validationResult(req).array();
+      if (validation.length) {
+        return res.status(422).send(
+          failure(
+            "Failed to Edit Book",
+            validation.map((x) => x.msg)
+          )
+        );
+      }
+      const { id, title, author, price, genre, year, pages, stock } = req.body;
+      const book = await bookModel.findOne({ _id: id });
+      if (title != undefined) book.title = title;
+      if (author != undefined) book.author = author;
+      if (price != undefined) book.price = price;
+      if (genre != undefined) book.genre = genre;
+      if (year != undefined) book.year = year;
+      if (pages != undefined) book.pages = pages;
+      if (stock != undefined) book.stock = stock;
+
+      await book.save();
+      return res
+        .status(200)
+        .send(success("Book Data is Updated Successfully", book));
+    } catch (err) {
+      console.log("edit controller catch");
+      return res.status(500).send(failure("Internal Server Error!"));
+    }
+  }
   async getAllByFilter(req, res) {
     try {
       const {
@@ -63,25 +106,15 @@ class Book {
         sortParam,
         price,
         priceFilter,
+        year,
+        yearFilter,
         rating,
         ratingFilter,
         stock,
         stockFilter,
         search,
+        category,
       } = req.query;
-      // console.log(
-      //   page,
-      //   limit,
-      //   sort,
-      //   sortParam,
-      //   price,
-      //   priceFilter,
-      //   rating,
-      //   ratingFilter,
-      //   stock,
-      //   stockFilter,
-      //   search
-      // );
       if (
         (sortParam && !sortBy) ||
         (!sortParam && sortBy) ||
@@ -92,7 +125,6 @@ class Book {
           sortParam != "rating" &&
           sortParam != "title" &&
           sortParam != "author" &&
-          sortParam != "discountPercentage" &&
           sortParam != "year" &&
           sortParam != "pages") ||
         (price && !priceFilter) ||
@@ -101,12 +133,16 @@ class Book {
         (stock && !stockFilter) ||
         (!stock && stockFilter) ||
         (stockFilter && stockFilter != "low" && stockFilter != "high") ||
+        (year && !yearFilter) ||
+        (!year && yearFilter) ||
+        (yearFilter && yearFilter != "low" && yearFilter != "high") ||
         (rating && !ratingFilter) ||
         (!rating && ratingFilter) ||
         (ratingFilter && ratingFilter != "low" && ratingFilter != "high")
       ) {
         return res.status(401).send(failure("Invalid Parameters"));
       }
+
       if (page < 1 || limit < 1) {
         return res
           .status(401)
@@ -116,6 +152,10 @@ class Book {
       if (price) {
         if (priceFilter === "low") filters.price = { $lt: parseInt(price) };
         else filters.price = { $gt: parseInt(price) };
+      }
+      if (year) {
+        if (yearFilter === "low") filters.year = { $lt: parseInt(year) };
+        else filters.year = { $gt: parseInt(year) };
       }
       if (rating) {
         if (ratingFilter === "low")
@@ -131,27 +171,30 @@ class Book {
           { title: { $regex: search, $options: "i" } },
           { author: { $regex: search, $options: "i" } },
         ];
+      if (category) filters.genre = { $in: [category] };
+      // db.books.find({genre:{$in["Fantasy"]}})
       const count = await bookModel.find({}).count();
       // console.log(count);
       const allBook = await bookModel
         .find(filters)
-        .sort({ [sortParam]: sort === "asc" ? 1 : -1 })
+        .sort({ [sortParam]: sortBy === "asc" ? 1 : -1 })
         .skip((page - 1) * limit)
         .limit(limit ? limit : 20);
       if (allBook.length > 0) {
         return res.status(200).send(
           success("All Data is Fetched!", {
             total: count,
-            totalPerPage: allProduct.length,
+            booksPerPage: allBook.length,
             pageNum: page,
             limit: limit,
-            product: allProduct,
+            book: allBook,
           })
         );
       } else {
         return res.status(404).send(success("No Data is Found!"));
       }
     } catch (err) {
+      console.log("filter catch");
       return res.status(500).send(failure("Internal Server Error!"));
     }
   }

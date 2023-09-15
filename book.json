@@ -8,7 +8,6 @@
         ],
         "year": 2010,
         "pages": 280,
-        "discountPercentage": 10,
         "rating": 0,
         "stock": 30
     },
@@ -21,7 +20,6 @@
         ],
         "year": 2015,
         "pages": 400,
-        "discountPercentage": 15,
         "rating": 0,
         "stock": 20
     },
@@ -35,7 +33,6 @@
         ],
         "year": 2020,
         "pages": 350,
-        "discountPercentage": 5,
         "rating": 0,
         "stock": 15
     },
@@ -48,7 +45,6 @@
         ],
         "year": 2018,
         "pages": 240,
-        "discountPercentage": 12,
         "rating": 0,
         "stock": 25
     },
@@ -62,7 +58,6 @@
         ],
         "year": 2012,
         "pages": 320,
-        "discountPercentage": 8,
         "rating": 0,
         "stock": 10
     },
@@ -75,7 +70,6 @@
         ],
         "year": 2017,
         "pages": 280,
-        "discountPercentage": 10,
         "rating": 0,
         "stock": 35
     },
@@ -88,7 +82,6 @@
         ],
         "year": 2019,
         "pages": 150,
-        "discountPercentage": 7,
         "rating": 0,
         "stock": 18
     },
@@ -102,7 +95,6 @@
         ],
         "year": 2016,
         "pages": 200,
-        "discountPercentage": 10,
         "rating": 0,
         "stock": 22
     },
@@ -115,7 +107,6 @@
         ],
         "year": 2014,
         "pages": 290,
-        "discountPercentage": 8,
         "rating": 0,
         "stock": 28
     },
@@ -129,7 +120,6 @@
         ],
         "year": 2021,
         "pages": 180,
-        "discountPercentage": 15,
         "rating": 0,
         "stock": 12
     },
@@ -143,7 +133,6 @@
         ],
         "year": 2013,
         "pages": 260,
-        "discountPercentage": 7,
         "rating": 0,
         "stock": 40
     },
@@ -157,7 +146,6 @@
         ],
         "year": 2022,
         "pages": 310,
-        "discountPercentage": 10,
         "rating": 0,
         "stock": 8
     },
@@ -171,7 +159,6 @@
         ],
         "year": 2011,
         "pages": 270,
-        "discountPercentage": 12,
         "rating": 0,
         "stock": 19
     },
@@ -185,7 +172,6 @@
         ],
         "year": 2016,
         "pages": 220,
-        "discountPercentage": 5,
         "rating": 0,
         "stock": 24
     },
@@ -198,7 +184,6 @@
         ],
         "year": 2020,
         "pages": 330,
-        "discountPercentage": 8,
         "rating": 0,
         "stock": 16
     },
@@ -212,7 +197,6 @@
         ],
         "year": 2019,
         "pages": 250,
-        "discountPercentage": 7,
         "rating": 0,
         "stock": 21
     },
@@ -226,7 +210,6 @@
         ],
         "year": 2018,
         "pages": 190,
-        "discountPercentage": 10,
         "rating": 0,
         "stock": 29
     },
@@ -240,7 +223,6 @@
         ],
         "year": 2015,
         "pages": 280,
-        "discountPercentage": 12,
         "rating": 0,
         "stock": 14
     },
@@ -254,7 +236,6 @@
         ],
         "year": 2017,
         "pages": 120,
-        "discountPercentage": 5,
         "rating": 0,
         "stock": 33
     }

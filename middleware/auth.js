@@ -30,7 +30,7 @@ const isAdmin = (req, res, next) => {
     if (payload.role === 1) {
       next();
     } else {
-      return res.status(200).send(failure("Unauthorized Access!"));
+      return res.status(401).send(failure("Unauthorized Access!"));
     }
   } catch (error) {
     console.log("admin catch");

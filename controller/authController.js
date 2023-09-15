@@ -10,10 +10,14 @@ class Auth {
   async signup(req, res) {
     try {
       const validation = validationResult(req).array();
+      console.log(validation);
       if (validation.length > 0) {
-        return res
-          .status(200)
-          .send(failure("Failed to Add User", validation[0].msg));
+        return res.status(422).send(
+          failure(
+            "Failed to Add User",
+            validation.map((x) => x.msg)
+          )
+        );
       }
       const { name, email, password, phone, address, role } = req.body;
       const finder = await userModel.findOne({ email: email });
