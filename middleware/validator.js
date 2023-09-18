@@ -62,24 +62,18 @@ const authValidator = {
 };
 const isValid = {
   addToCart: [
-    body("userId")
+    body("bookId")
       .exists()
-      .withMessage("User ID must be provided")
-      .bail()
-      .matches(/^[a-f\d]{24}$/i)
-      .withMessage("Invalid ID Format"),
-    body("productId")
-      .exists()
-      .withMessage("Product ID must be provided")
+      .withMessage("Book ID must be provided")
       .bail()
       .matches(/^[a-f\d]{24}$/i)
       .withMessage("Invalid ID Format"),
     body("amount")
       .exists()
-      .withMessage("Product Quantity must be provided")
+      .withMessage("Book Quantity must be provided")
       .bail()
       .isInt({ min: 1 })
-      .withMessage("Quantity must be Greater than or Equal to One"),
+      .withMessage("Quantity must be Greater than or Equal to 1"),
   ],
   userEditValidation: [
     body("id")

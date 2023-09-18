@@ -67,7 +67,7 @@ class Auth {
     delete responseData.password;
     delete responseData.__v;
     const jwt = jsonwebtoken.sign(responseData, process.env.SECRET_KEY, {
-      expiresIn: 30,
+      expiresIn: 300,
     });
     responseData.token = jwt;
     return res
