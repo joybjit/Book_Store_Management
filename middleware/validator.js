@@ -59,6 +59,21 @@ const authValidator = {
       .withMessage("Address must be non-empty")
       .bail(),
   ],
+  login: [
+    body("email")
+      .exists()
+      .withMessage("Email must be provided")
+      .bail()
+      .isString()
+      .withMessage("Email must be string")
+      .bail()
+      .not()
+      .isEmpty()
+      .withMessage("Email must be non-empty")
+      .bail()
+      .isEmail()
+      .withMessage("Email must be in valid format"),
+  ],
 };
 const isValid = {
   addToCart: [
@@ -186,6 +201,92 @@ const isValid = {
       .optional()
       .isInt({ min: 1800 })
       .withMessage("Year must be valid integer"),
+  ],
+  reviewRatingAdd: [
+    body("bookId")
+      .exists()
+      .withMessage("Book ID must be provided")
+      .bail()
+      .matches(/^[a-f\d]{24}$/i)
+      .withMessage("Invalid ID Format"),
+    body("review").optional().isString().withMessage("Review must be a string"),
+    body("rating")
+      .exists()
+      .withMessage("Rating must be provided")
+      .bail()
+      .isInt({ min: 1, max: 5 })
+      .withMessage("Rating must be in between 1 to 5"),
+  ],
+  editReview: [
+    body("bookId")
+      .exists()
+      .withMessage("Book ID must be provided")
+      .bail()
+      .matches(/^[a-f\d]{24}$/i)
+      .withMessage("Invalid ID Format"),
+    body("review")
+      .exists()
+      .withMessage("Review must be provided")
+      .bail()
+      .isString()
+      .withMessage("Review must be a string"),
+  ],
+  removeReviewRating: [
+    body("bookId")
+      .exists()
+      .withMessage("Book ID must be provided")
+      .bail()
+      .matches(/^[a-f\d]{24}$/i)
+      .withMessage("Invalid ID Format"),
+  ],
+  addBalance: [
+    body("amount")
+      .exists()
+      .withMessage("Amount must be provided")
+      .bail()
+      .isInt({ min: 20, max: 10000 })
+      .withMessage("Amount must be in between 20 to 10000"),
+  ],
+  addDiscount: [
+    body("bookId")
+      .exists()
+      .withMessage("Book ID must be provided")
+      .bail()
+      .matches(/^[a-f\d]{24}$/i)
+      .withMessage("Invalid ID Format"),
+    body("discountPercentage")
+      .exists()
+      .withMessage("Discount Percentage must be provided")
+      .bail()
+      .isInt({ min: 0, max: 100 })
+      .withMessage("Discount Percentage must be in between 0 to 100"),
+    body("activeTime")
+      .optional()
+      .isISO8601()
+      .withMessage("Invalid Date Format"),
+    body("endTime")
+      .exists()
+      .withMessage("Discount End Time must be provided")
+      .bail()
+      .isISO8601()
+      .withMessage("Invalid Date Format"),
+  ],
+  updateDiscount: [
+    body("bookId")
+      .exists()
+      .withMessage("Book ID must be provided")
+      .bail()
+      .matches(/^[a-f\d]{24}$/i)
+      .withMessage("Invalid ID Format"),
+    body("discountPercentage")
+      .optional()
+      .isInt({ min: 0, max: 100 })
+      .withMessage("Discount Percentage must be in between 0 to 100"),
+    body("activeTime")
+      .optional()
+      .isISO8601()
+      .withMessage("Invalid Date Format"),
+    body("endTime").optional().isISO8601().withMessage("Invalid Date Format"),
   ],
 };
 

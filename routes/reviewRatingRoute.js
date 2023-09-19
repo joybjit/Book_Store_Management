@@ -1,9 +1,18 @@
 const express = require("express");
 const route = express();
 const reviewRatingController = require("../controller/reviewRatingController");
+const { isValid } = require("../middleware/validator");
 
-route.post("/add", reviewRatingController.addReviewRating);
-route.patch("/edit", reviewRatingController.editReview);
-route.post("/remove", reviewRatingController.removeReviewRating);
+route.post(
+  "/add",
+  isValid.reviewRatingAdd,
+  reviewRatingController.addReviewRating
+);
+route.patch("/edit", isValid.editReview, reviewRatingController.editReview);
+route.post(
+  "/remove",
+  isValid.removeReviewRating,
+  reviewRatingController.removeReviewRating
+);
 
 module.exports = route;

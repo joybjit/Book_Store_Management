@@ -2,6 +2,7 @@ const reviewRatingModel = require("../model/reviewRatingModel");
 const bookModel = require("../model/bookModel");
 const userModel = require("../model/userModel");
 const jsonwebtoken = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 const { success, failure } = require("../util/common");
 
 class reviewRating {
@@ -13,6 +14,15 @@ class reviewRating {
       const check = jsonwebtoken.verify(token, process.env.SECRET_KEY);
       if (!check) throw new Error();
 
+      const validation = validationResult(req).array();
+      if (validation.length > 0) {
+        return res.status(422).send(
+          failure(
+            "Failed to Add Review-Rating",
+            validation.map((x) => x.msg)
+          )
+        );
+      }
       const user = await userModel.findOne({ email: check.email });
       const { bookId, review, rating } = req.body;
       const book = await bookModel.findOne({ _id: bookId });
@@ -73,6 +83,15 @@ class reviewRating {
       const check = jsonwebtoken.verify(token, process.env.SECRET_KEY);
       if (!check) throw new Error();
 
+      const validation = validationResult(req).array();
+      if (validation.length > 0) {
+        return res.status(422).send(
+          failure(
+            "Failed to Edit Review",
+            validation.map((x) => x.msg)
+          )
+        );
+      }
       const user = await userModel.findOne({ email: check.email });
       const { bookId, review } = req.body;
       const book = await bookModel.findOne({ _id: bookId });
@@ -116,6 +135,15 @@ class reviewRating {
       const check = jsonwebtoken.verify(token, process.env.SECRET_KEY);
       if (!check) throw new Error();
 
+      const validation = validationResult(req).array();
+      if (validation.length > 0) {
+        return res.status(422).send(
+          failure(
+            "Failed to Edit Review",
+            validation.map((x) => x.msg)
+          )
+        );
+      }
       const user = await userModel.findOne({ email: check.email });
       const { bookId } = req.body;
       const book = await bookModel.findOne({ _id: bookId });

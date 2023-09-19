@@ -59,7 +59,7 @@ class Book {
       const { id } = req.params;
       const deleteResult = await bookModel.deleteOne({ _id: id });
       if (deleteResult.deletedCount) {
-        return res.status(200).send(failure("Book is Deleted Successfully!"));
+        return res.status(200).send(success("Book is Deleted Successfully!"));
       } else {
         return res.status(404).send(failure("Failed to Delete Book!"));
       }
@@ -87,7 +87,17 @@ class Book {
       if (year != undefined) book.year = year;
       if (pages != undefined) book.pages = pages;
       if (stock != undefined) book.stock = stock;
-
+      if (
+        title == undefined &&
+        author == undefined &&
+        price == undefined &&
+        genre == undefined &&
+        year == undefined &&
+        pages == undefined &&
+        stock == undefined
+      ) {
+        return res.status(204).send(success("No Data is Updated!"));
+      }
       await book.save();
       return res
         .status(200)
@@ -172,7 +182,6 @@ class Book {
           { author: { $regex: search, $options: "i" } },
         ];
       if (category) filters.genre = { $in: [category] };
-      // db.books.find({genre:{$in["Fantasy"]}})
       const count = await bookModel.find({}).count();
       // console.log(count);
       const allBook = await bookModel
@@ -185,9 +194,9 @@ class Book {
           success("All Data is Fetched!", {
             total: count,
             booksPerPage: allBook.length,
-            pageNum: page,
-            limit: limit,
-            book: allBook,
+            pageNum: parseInt(page),
+            limit: parseInt(limit),
+            books: allBook,
           })
         );
       } else {

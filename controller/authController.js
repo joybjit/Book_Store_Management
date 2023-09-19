@@ -51,6 +51,15 @@ class Auth {
     }
   }
   async login(req, res) {
+    const validation = validationResult(req).array();
+    if (validation.length > 0) {
+      return res.status(422).send(
+        failure(
+          "Failed to Login",
+          validation.map((x) => x.msg)
+        )
+      );
+    }
     const { email, password } = req.body;
     const auth = await authModel
       .findOne({ email: email })
@@ -67,7 +76,7 @@ class Auth {
     delete responseData.password;
     delete responseData.__v;
     const jwt = jsonwebtoken.sign(responseData, process.env.SECRET_KEY, {
-      expiresIn: 300,
+      expiresIn: "1h",
     });
     responseData.token = jwt;
     return res

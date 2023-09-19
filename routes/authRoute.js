@@ -4,6 +4,6 @@ const authController = require("../controller/authController");
 const { authValidator } = require("../middleware/validator");
 
 route.post("/signup", authValidator.signup, authController.signup);
-route.get("/login", authController.login);
+route.post("/login", authValidator.login, authController.login);
 
 module.exports = route;

@@ -1,11 +1,21 @@
 const jsonwebtoken = require("jsonwebtoken");
 const userModel = require("../model/userModel");
 const walletModel = require("../model/walletModel");
+const { validationResult } = require("express-validator");
 const { failure, success } = require("../util/common");
 
 class Wallet {
   async addBalance(req, res) {
     try {
+      const validation = validationResult(req).array();
+      if (validation.length > 0) {
+        return res.status(422).send(
+          failure(
+            "Invalid Input Provided",
+            validation.map((x) => x.msg)
+          )
+        );
+      }
       const { amount } = req.body;
       if (!req.headers.authorization)
         return res.status(401).send(failure("Unauthorized Access!"));

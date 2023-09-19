@@ -11,6 +11,14 @@ const { validationResult } = require("express-validator");
 class Cart {
   async addToCart(req, res) {
     try {
+      const { bookId, amount } = req.body;
+      //   console.log(req.headers.authorization);
+      if (!req.headers.authorization)
+        return res.status(401).send(failure("Unauthorized Access!"));
+      const token = req.headers.authorization.split(" ")[1];
+      const check = jsonwebtoken.verify(token, process.env.SECRET_KEY);
+      if (!check) throw new Error();
+
       const validation = validationResult(req).array();
       //   console.log(validation);
       if (validation.length > 0) {
@@ -21,14 +29,6 @@ class Cart {
           )
         );
       }
-      const { bookId, amount } = req.body;
-      //   console.log(req.headers.authorization);
-      if (!req.headers.authorization)
-        return res.status(401).send(failure("Unauthorized Access!"));
-      const token = req.headers.authorization.split(" ")[1];
-      const check = jsonwebtoken.verify(token, process.env.SECRET_KEY);
-      if (!check) throw new Error();
-
       const user = await userModel.findOne({ email: check.email });
 
       const book = await bookModel.findOne({ _id: bookId });
@@ -42,8 +42,8 @@ class Cart {
       let totalCost = 0;
       if (
         discountBook &&
-        discountBook.activeTime < new Date() &&
-        discountBook.endTime > new Date()
+        discountBook.activeTime <= new Date() &&
+        discountBook.endTime >= new Date()
       ) {
         const cal = book.price * amount;
         totalCost += cal - (cal * discountBook.discountPercentage) / 100;
@@ -110,22 +110,6 @@ class Cart {
       return res.status(500).send(failure("Internal Server Error!"));
     }
   }
-  async deleteCart(req, res) {
-    try {
-      const { id } = req.params;
-      const deletionResult = await cartModel.deleteOne({ user: id });
-
-      if (deletionResult.deletedCount === 0) {
-        return res
-          .status(404)
-          .send(failure("Cart Not Found for the User!", deletionResult));
-      }
-      return res.send(success("Cart Deleted Successfully!", deletionResult));
-    } catch (err) {
-      //   console.error(err);
-      return res.status(500).send(failure("Internal Server Error!"));
-    }
-  }
   async removeItem(req, res) {
     try {
       const { bookId, amount } = req.body;
@@ -135,6 +119,15 @@ class Cart {
       const check = jsonwebtoken.verify(token, process.env.SECRET_KEY);
       if (!check) throw new Error();
 
+      const validation = validationResult(req).array();
+      if (validation.length > 0) {
+        return res.status(200).send(
+          failure(
+            "Failed to Add to Cart",
+            validation.map((x) => x.msg)
+          )
+        );
+      }
       const user = await userModel.findOne({ email: check.email });
 
       const book = await bookModel.findOne({ _id: bookId });
@@ -149,6 +142,7 @@ class Cart {
             .status(404)
             .send(failure("Book is not Found in the Cart!"));
         }
+
         if (userInCart.books[bookIndex].quantity < amount) {
           return res
             .status(401)
@@ -166,7 +160,24 @@ class Cart {
             }
           }
           userInCart.books.splice(bookIndex, 1);
-          userInCart.total -= amount * book.price;
+          let totalCost = 0;
+          for (const cartItem of userInCart.books) {
+            const bookData = await bookModel.findOne({
+              _id: cartItem.book,
+            });
+            const discountBook = await discountModel.findOne({
+              bookId: cartItem.book,
+            });
+            if (
+              discountBook &&
+              discountBook.activeTime <= new Date() &&
+              discountBook.endTime >= new Date()
+            ) {
+              const cal = bookData.price * cartItem.quantity;
+              totalCost += cal - (cal * discountBook.discountPercentage) / 100;
+            } else totalCost += bookData.price * cartItem.quantity;
+          }
+          userInCart.total = totalCost;
           userInCart.save();
           return res
             .status(200)
@@ -175,7 +186,24 @@ class Cart {
             );
         } else if (userInCart.books[bookIndex].quantity > amount) {
           userInCart.books[bookIndex].quantity -= amount;
-          userInCart.total -= amount * book.price;
+          let totalCost = 0;
+          for (const cartItem of userInCart.books) {
+            const bookData = await bookModel.findOne({
+              _id: cartItem.book,
+            });
+            const discountBook = await discountModel.findOne({
+              bookId: cartItem.book,
+            });
+            if (
+              discountBook &&
+              discountBook.activeTime <= new Date() &&
+              discountBook.endTime >= new Date()
+            ) {
+              const cal = bookData.price * cartItem.quantity;
+              totalCost += cal - (cal * discountBook.discountPercentage) / 100;
+            } else totalCost += bookData.price * cartItem.quantity;
+          }
+          userInCart.total = totalCost;
           userInCart.save();
           return res
             .status(200)
@@ -206,6 +234,9 @@ class Cart {
         .findOne({ user: user._id })
         .populate("user", "name -_id")
         .populate("books.book", "title price -_id");
+      if (!cart) {
+        return res.status(404).send(success("Cart for this user not found!"));
+      }
       const viewCart = cart.toObject();
       delete viewCart._id;
       delete viewCart.__v;
@@ -237,6 +268,7 @@ class Cart {
           .send(failure("Cart is not found for this user!"));
       }
       const wallet = await walletModel.findOne({ user: user._id });
+      let totalCost = 0;
       for (const cartItem of userInCart.books) {
         const bookData = await bookModel.findOne({
           _id: cartItem.book,
@@ -244,22 +276,13 @@ class Cart {
         if (bookData.stock < cartItem.quantity) {
           return res.status(401).send(failure("Book is Out of Stock!"));
         }
-      }
-      let totalCost = 0;
-      // console.log(totalCost);
-      for (const cartItem of userInCart.books) {
-        const bookData = await bookModel.findOne({
-          _id: cartItem.book,
-        });
-        bookData.stock -= cartItem.quantity;
-        await bookData.save();
         const discountBook = await discountModel.findOne({
           bookId: cartItem.book,
         });
         if (
           discountBook &&
-          discountBook.activeTime < new Date() &&
-          discountBook.endTime > new Date()
+          discountBook.activeTime <= new Date() &&
+          discountBook.endTime >= new Date()
         ) {
           const cal = bookData.price * cartItem.quantity;
           totalCost += cal - (cal * discountBook.discountPercentage) / 100;
@@ -268,6 +291,14 @@ class Cart {
       if (totalCost > wallet.balance) {
         return res.status(422).send(failure("Insufficient Balance!"));
       }
+      for (const cartItem of userInCart.books) {
+        const bookData = await bookModel.findOne({
+          _id: cartItem.book,
+        });
+        bookData.stock -= cartItem.quantity;
+        await bookData.save();
+      }
+
       wallet.balance -= totalCost;
       await wallet.save();
       const trans = await transactionModel.create({

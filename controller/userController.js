@@ -25,7 +25,7 @@ class User {
       const deleteResult = await userModel.deleteOne({ _id: id });
       if (deleteResult.deletedCount) {
         await authModel.deleteOne({ user: id });
-        return res.status(200).send(failure("User is Deleted Successfully!"));
+        return res.status(200).send(success("User is Deleted Successfully!"));
       } else {
         return res.status(404).send(failure("Failed to Delete User!"));
       }
@@ -50,8 +50,19 @@ class User {
       if (email != undefined) user.email = email;
       if (phone != undefined) user.phone = phone;
       if (address != undefined) user.address = address;
+
       await user.save();
-      return res.status(200).send(success("User Data is Updated Successfully"));
+      if (
+        name == undefined &&
+        email == undefined &&
+        phone == undefined &&
+        address == undefined
+      ) {
+        return res.status(200).send(success("No Data is Updated!"));
+      }
+      return res
+        .status(200)
+        .send(success("User Data is Updated Successfully", user));
     } catch (err) {
       return res.status(500).send(failure("Internal Server Error!"));
     }
